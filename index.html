@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://www.youtube.com; frame-src https://www.youtube.com; script-src 'self' 'unsafe-inline'">
+<<<<<<< HEAD
     <link rel="stylesheet" href="styles.css">
 
   </head>
@@ -13,4 +14,88 @@
     Seu navegador não suporta vídeo.
   </video>
 </body>
+=======
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      body, html {
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+        background-color: black;
+      }
+
+      #video-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        overflow: hidden;
+      }
+
+      #youtube-frame {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+        object-fit: cover;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="video-container">
+      <iframe id="youtube-frame" 
+        frameborder="0" 
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+        referrerpolicy="strict-origin-when-cross-origin" 
+        allowfullscreen></iframe>
+    </div>
+    <script>
+
+      const videoIds = [
+        '4BQ5NxoemNc',
+        '97Kh-t2Vong',
+        'dQw4w9WgXcQ',
+        'cSxH8YPFYnY',
+        'NrcvShURw5I',
+        'VTd5beRTd4k',
+        'aswWb7pPTsQ',
+        'sgav9fqwq3M',
+        'TfUzGtDfTtI',
+        'P4M0tecQ95o',
+        '746beaA1Kdg',
+        'Zm_jOMNTg1s',
+        'h0S05Dmi1Xc',
+        'zhUtqc1yo4A',
+        'sgav9fqwq3M',
+        'YRpwU4lBXVI',
+        '3usEYJgmZbA',
+        'pNsQKmOPjhg',
+        '746beaA1Kdg',
+        '3usEYJgmZbA'
+      ];
+
+      function getRandomVideo() {
+        const randomIndex = Math.floor(Math.random() * videoIds.length);
+        return videoIds[randomIndex];
+      }
+
+      function changeVideo() {
+        const videoId = getRandomVideo();
+        const iframe = document.getElementById('youtube-frame');
+        iframe.src = `https://www.youtube.com/embed/${videoId}?si=iRudNNtvg-fnaWT8&autoplay=1&mute=1&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&disablekb=1&playsinline=1&fs=0`;
+      }
+
+      window.onload = changeVideo;
+    // ... existing code ...
+    </script>
+  </body>
+>>>>>>> d0d9500f408fa475ee755a3cfe68d9b02097ffba
 </html>
