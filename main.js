@@ -16,9 +16,11 @@ function createWindow() {
 
   mainWindow.loadFile('index.html')
 
-  mainWindow.on('closed', () => {
-    mainWindow = null
-  })
+   mainWindow.on('close', (event) => {
+    event.preventDefault();         
+    mainWindow.hide();              
+  });
+  
 }
 
 app.whenReady().then(createWindow)
