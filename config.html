@@ -1,0 +1,43 @@
+<html lang="pt-BR" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Input de Arrastar de 1% a 99% com Botão Salvar</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
+  <div class="w-full max-w-md bg-white rounded-lg shadow-lg p-6">
+    <h1 class="text-2xl font-semibold text-gray-800 mb-6 text-center">
+      Selecione a porcentagem
+    </h1>
+    <div class="flex flex-col items-center space-y-6">
+      <input
+        type="range"
+        min="1"
+        max="99"
+        value="20"
+        id="percentRange"
+        class="w-full h-3 rounded-lg appearance-none cursor-pointer bg-gradient-to-r from-blue-500 to-blue-700"
+      />
+      <div class="text-xl font-semibold text-blue-700" id="percentValue">20%</div>
+      <button
+        id="saveButton"
+        class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-md shadow-md transition-colors flex items-center space-x-2"
+        type="button"
+      >
+        <i class="fas fa-save"></i>
+        <span>Salvar</span>
+      </button>
+      <div id="saveMessage" class="text-green-600 font-medium hidden"></div>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+</body>
+</html>
