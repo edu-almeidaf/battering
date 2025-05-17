@@ -17,8 +17,10 @@ function createWindow() {
 
 si.battery().then(battery => {
   console.log('Bateria detectada:', battery.hasBattery);
-  console.log('Detalhes:', battery);
+  console.log('Carregando:', battery.isCharging);
+  console.log("Porcentagem:", battery.percent);
 }).catch(err => console.error(err));
+
 
  
 
