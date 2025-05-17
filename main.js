@@ -5,8 +5,9 @@ let mainWindow
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    fullscreen: true, 
+    //fullscreen: true, 
     autoHideMenuBar: true,
+    frame: false,
     webPreferences: {
       // preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,
