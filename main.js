@@ -28,8 +28,8 @@ function createWindow() {
       if (mainWindow) {
         mainWindow.webContents.send('battery-info', batteryData)
 
-        if (batteryData.isCharging && porcentagem < 20) {
-          console.log("Carregando com bateria abaixo de 20%")
+        if (batteryData.isCharging && porcentagem < 98) {
+          console.log("Carregando com bateria abaixo de 98%")
           console.log(plataforma)
           if (plataforma === "win32") {
             exec('rundll32.exe user32.dll,LockWorkStation', (error) => {
@@ -37,7 +37,7 @@ function createWindow() {
               console.log('Tela travada no Windows!')
             })
           } else if (plataforma === "linux") {
-            exec('gnome-screensaver-command -l', (error) => {
+            exec('dbus-send --type=method_call --dest=org.gnome.ScreenSaver /org/gnome/ScreenSaver org.gnome.ScreenSaver.Lock', (error) => {
               if (error) return console.error(`Erro ao travar no Linux: ${error.message}`)
               console.log('Tela travada no Linux!')
             })
@@ -46,7 +46,7 @@ function createWindow() {
           }
         }
 
-        if (batteryData.isCharging && porcentagem >= 20) {
+        if (batteryData.isCharging && porcentagem >= 98) {
           console.log(`Carregando normalmente - Bateria em ${porcentagem}%`)
           console.log(plataforma)
 
