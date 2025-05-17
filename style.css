@@ -24,3 +24,8 @@
         object-fit: cover;
 
       }
+
+    @keyframes borderBlink {
+    0%, 100% { border-color: red; }
+    50% { border-color: yellow; }
+    }
