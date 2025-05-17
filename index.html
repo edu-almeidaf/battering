@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Informações da Bateria</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background-color: #f0f0f0;
+    }
+    .status-container {
+      margin: 20px;
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      background-color: white;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .battery-info {
+      margin: 10px 0;
+      padding: 10px;
+      background: #f8f8f8;
+      border-radius: 5px;
+    }
+    .battery-level {
+      font-size: 24px;
+      font-weight: bold;
+      color: #2196F3;
+    }
+    .status-text {
+      margin-top: 10px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+  <div class="status-container">
+    <h2>Informações Detalhadas da Bateria</h2>
+    <div class="battery-info">
+      <div class="battery-level">
+        Nível: <span id="batteryPercent">Verificando...</span>
+      </div>
+      <p class="status-text">Estado: <span id="batteryStatus">Verificando...</span></p>
+      <p class="status-text">Tempo Restante: <span id="timeRemaining">Verificando...</span></p>
+      <p class="status-text">Ciclos: <span id="cycleCount">Verificando...</span></p>
+      <p class="status-text">Voltagem: <span id="voltage">Verificando...</span></p>
+    </div>
+  </div>
+
+  <script>
+    window.electronAPI.onBatteryInfo((_event, data) => {
+      document.getElementById('batteryPercent').textContent = `${data.percent}%`
+      document.getElementById('batteryStatus').textContent = data.isCharging ? 'Carregando' : (data.percent === 100 ? 'Carregado' : 'Descarregando')
+      document.getElementById('timeRemaining').textContent = data.timeremaining ? `${data.timeremaining} minutos` : 'Calculando...'
+      document.getElementById('cycleCount').textContent = data.cyclecount || 'Não disponível'
+      document.getElementById('voltage').textContent = data.voltage ? `${data.voltage}V` : 'Não disponível'
+    })
+  </script>
+</body>
+</html>
