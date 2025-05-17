@@ -3,10 +3,13 @@ const path = require('path')
 const si = require('systeminformation')
 const { exec } = require('child_process')
 const os = require('os')
+const popupGenerate = require('./popupGenerate')
 
 let mainWindow
 let tray = null
 let ultimoNivelBateria = null // 👈 controle da última porcentagem da bateria
+
+let contadorPopups = 0
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -38,7 +41,8 @@ function createWindow() {
 
       // 🔔 Notificação se valor mudou
       if (porcentagem !== ultimoNivelBateria && porcentagem != null && batteryData.isCharging == false) {
-        mostrarPopup(`A bateria esta em ${porcentagem}%`)
+        contadorPopups++
+        popupGenerate(`A bateria esta em ${porcentagem}%`, contadorPopups)
         ultimoNivelBateria = porcentagem
       }
 
@@ -87,72 +91,6 @@ function createWindow() {
     mainWindow = null
   })
 }
-let contadorPopups = 0
-
-function mostrarPopup(mensagem) {
-  const { screen } = require('electron')
-  const display = screen.getPrimaryDisplay()
-  const { width, height } = display.workAreaSize
-
-  const popupWidth = 400
-  const popupHeight = 120
-
-  contadorPopups++ // Aumenta o número de popups a serem exibidos
-
-  for (let i = 0; i < contadorPopups; i++) {
-    const randomX = Math.floor(Math.random() * (width - popupWidth))
-    const randomY = Math.floor(Math.random() * (height - popupHeight))
-
-    const popup = new BrowserWindow({
-      width: popupWidth,
-      height: popupHeight,
-      x: randomX,
-      y: randomY,
-      frame: false,
-      alwaysOnTop: true,
-      skipTaskbar: true,
-      resizable: false,
-      transparent: true,
-      show: false,
-      webPreferences: {
-        nodeIntegration: true,
-      }
-    })
-
-    popup.loadURL(`data:text/html;charset=utf-8,
-      <html>
-        <head>
-          <style>
-            @keyframes piscar {
-              0%, 100% { background-color: rgba(255, 0, 0, 0.9); }
-              50% { background-color: rgba(50, 0, 0, 0.9); }
-            }
-            body {
-              margin: 0;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              animation: piscar 1s infinite;
-              color: white;
-              font-size: 22px;
-              font-family: sans-serif;
-            }
-          </style>
-        </head>
-        <body>
-          ${mensagem}
-        </body>
-      </html>`)
-
-    popup.once('ready-to-show', () => {
-      popup.show()
-    })
-
-    
-  }
-}
-
-
 
 app.whenReady().then(createWindow)
 
