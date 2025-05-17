@@ -1,6 +1,8 @@
 const { app, BrowserWindow } = require('electron')
 const path = require('path')
 const si = require('systeminformation')
+const { exec } = require('child_process')
+const os = require('os')
 
 let mainWindow
 
@@ -11,7 +13,6 @@ function createWindow() {
     webPreferences: {
       contextIsolation: true,
       preload: path.join(__dirname, 'preload.js')
-
     }
   })
 
@@ -21,31 +22,52 @@ function createWindow() {
   async function updateBatteryInfo() {
     try {
       const batteryData = await si.battery()
+      const plataforma = os.platform()
+      const porcentagem = batteryData.percent
+
       if (mainWindow) {
         mainWindow.webContents.send('battery-info', batteryData)
-        
-        if(batteryData.isCharging){
-          console.log("Esta carregando, travar computador")
-        }
-        else{
-          console.log("A bateria esta descarregando mandar meme")
-          let porcentagem = batteryData.percent
-          console.log("A bateria esta em " + porcentagem)
-        }
-        
 
+        if (batteryData.isCharging && porcentagem < 20) {
+          console.log("Carregando com bateria abaixo de 20%")
+          console.log(plataforma)
+          if (plataforma === "win32") {
+            exec('rundll32.exe user32.dll,LockWorkStation', (error) => {
+              if (error) return console.error(`Erro ao travar no Windows: ${error.message}`)
+              console.log('Tela travada no Windows!')
+            })
+          } else if (plataforma === "linux") {
+            exec('gnome-screensaver-command -l', (error) => {
+              if (error) return console.error(`Erro ao travar no Linux: ${error.message}`)
+              console.log('Tela travada no Linux!')
+            })
+          } else {
+            console.log('Plataforma não suportada para travamento automático.')
+          }
+        }
+
+        if (batteryData.isCharging && porcentagem >= 20) {
+          console.log(`Carregando normalmente - Bateria em ${porcentagem}%`)
+          console.log(plataforma)
+
+        }
+
+        if (!batteryData.isCharging) {
+          console.log(`Descarregando - Bateria em ${porcentagem}% - Enviar meme`)
+        }
       }
     } catch (error) {
       console.error('Erro ao obter informações da bateria:', error)
     }
   }
+
+  // Esconde a janela ao invés de fechar
   mainWindow.on('close', (event) => {
-  event.preventDefault()
-  mainWindow.hide() // Oculta a janela
-})
+    event.preventDefault()
+    mainWindow.hide()
+  })
 
-
-  // Atualiza a cada 30 segundos
+  // Atualiza informações da bateria a cada segundo
   updateBatteryInfo()
   setInterval(updateBatteryInfo, 1000)
 
@@ -53,15 +75,6 @@ function createWindow() {
     mainWindow = null
   })
 }
-si.osInfo()
-  .then(data => {
-    if (mainWindow) {
-      mainWindow.webContents.send('platform-info', data.platform)
-    }
-  })
-  .catch(error => console.error(error))
-
-
 
 app.whenReady().then(createWindow)
 
