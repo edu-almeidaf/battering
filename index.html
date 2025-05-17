@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Informações da Bateria</title>
   <style>
     body {
@@ -37,14 +37,13 @@
 </head>
 <body>
   <div class="status-container">
-    <h2>Informações Detalhadas da Bateria</h2>
+    <p class="status-text">Sistema: <span id="platform">Verificando...</span></p>
+    <h2>Informações da Bateria</h2>
     <div class="battery-info">
       <div class="battery-level">
         Nível: <span id="batteryPercent">Verificando...</span>
       </div>
       <p class="status-text">Estado: <span id="batteryStatus">Verificando...</span></p>
-      <p class="status-text">Tempo Restante: <span id="timeRemaining">Verificando...</span></p>
-      <p class="status-text">Ciclos: <span id="cycleCount">Verificando...</span></p>
       <p class="status-text">Voltagem: <span id="voltage">Verificando...</span></p>
     </div>
   </div>
@@ -53,9 +52,11 @@
     window.electronAPI.onBatteryInfo((_event, data) => {
       document.getElementById('batteryPercent').textContent = `${data.percent}%`
       document.getElementById('batteryStatus').textContent = data.isCharging ? 'Carregando' : (data.percent === 100 ? 'Carregado' : 'Descarregando')
-      document.getElementById('timeRemaining').textContent = data.timeremaining ? `${data.timeremaining} minutos` : 'Calculando...'
-      document.getElementById('cycleCount').textContent = data.cyclecount || 'Não disponível'
       document.getElementById('voltage').textContent = data.voltage ? `${data.voltage}V` : 'Não disponível'
+    })
+
+    window.electronAPI.onPlatformInfo((platform) => {
+      document.getElementById('platform').textContent = platform
     })
   </script>
 </body>

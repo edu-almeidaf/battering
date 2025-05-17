@@ -11,6 +11,7 @@ function createWindow() {
     webPreferences: {
       contextIsolation: true,
       preload: path.join(__dirname, 'preload.js')
+
     }
   })
 
@@ -22,11 +23,27 @@ function createWindow() {
       const batteryData = await si.battery()
       if (mainWindow) {
         mainWindow.webContents.send('battery-info', batteryData)
+        
+        if(batteryData.isCharging){
+          console.log("Esta carregando, travar computador")
+        }
+        else{
+          console.log("A bateria esta descarregando mandar meme")
+          let porcentagem = batteryData.percent
+          console.log("A bateria esta em " + porcentagem)
+        }
+        
+
       }
     } catch (error) {
       console.error('Erro ao obter informações da bateria:', error)
     }
   }
+  mainWindow.on('close', (event) => {
+  event.preventDefault()
+  mainWindow.hide() // Oculta a janela
+})
+
 
   // Atualiza a cada 30 segundos
   updateBatteryInfo()
@@ -36,6 +53,15 @@ function createWindow() {
     mainWindow = null
   })
 }
+si.osInfo()
+  .then(data => {
+    if (mainWindow) {
+      mainWindow.webContents.send('platform-info', data.platform)
+    }
+  })
+  .catch(error => console.error(error))
+
+
 
 app.whenReady().then(createWindow)
 
