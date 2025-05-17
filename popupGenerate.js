@@ -1,16 +1,12 @@
 const { screen, BrowserWindow } = require('electron')
 
 function popupGenerate(mensagem, contadorPopups) {
-  console.log(contadorPopups);
-  
   const display = screen.getPrimaryDisplay()
   const { width, height } = display.workAreaSize
-
-  console.log(contadorPopups);
-  
-
   const popupWidth = 400
   const popupHeight = 120
+
+  const popupsCriados = []
 
   for (let i = 0; i < contadorPopups; i++) {
     const randomX = Math.floor(Math.random() * (width - popupWidth))
@@ -52,15 +48,15 @@ function popupGenerate(mensagem, contadorPopups) {
             }
           </style>
         </head>
-        <body>
-          ${mensagem}
-        </body>
+        <body>${mensagem}</body>
       </html>`)
 
-    popup.once('ready-to-show', () => {
-      popup.show()
-    })
+    popup.once('ready-to-show', () => popup.show())
+
+    popupsCriados.push(popup)
   }
+
+  return popupsCriados
 }
 
-module.exports = popupGenerate;
+module.exports = popupGenerate

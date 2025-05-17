@@ -3,13 +3,13 @@ const path = require('path')
 const si = require('systeminformation')
 const { exec } = require('child_process')
 const os = require('os')
-const popupGenerate = require('./popupGenerate')
+const popupGenerate = require("./popupGenerate")
+
 
 let mainWindow
 let tray = null
-let ultimoNivelBateria = null // 👈 controle da última porcentagem da bateria
-
-let contadorPopups = 0
+let ultimoNivelBateria = null
+let contadorPopups = 0;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
@@ -38,19 +38,25 @@ function createWindow() {
       const batteryData = await si.battery()
       const plataforma = os.platform()
       const porcentagem = batteryData.percent
+      const porcentagemDefinida = 40
+      if (porcentagem >= 41) {
+          fecharTodosPopups()
+        }
 
-      // 🔔 Notificação se valor mudou
-      if (porcentagem !== ultimoNivelBateria && porcentagem != null && batteryData.isCharging == false) {
+      if (porcentagem !== ultimoNivelBateria && porcentagem != null && batteryData.isCharging == false && porcentagem < porcentagemDefinida) {
         contadorPopups++
-        popupGenerate(`A bateria esta em ${porcentagem}%`, contadorPopups)
+        const novosPopups = popupGenerate(`A bateria está em ${porcentagem}%`, contadorPopups)
+        popupsAtivos.push(...novosPopups)
+
         ultimoNivelBateria = porcentagem
+        
       }
 
       if (mainWindow) {
         mainWindow.webContents.send('battery-info', batteryData)
 
-        if (batteryData.isCharging && porcentagem < 70) {
-          console.log("Carregando com bateria abaixo de 98%")
+        if (batteryData.isCharging && porcentagem < porcentagemDefinida) {
+          console.log("Carregando com bateria abaixo de " + porcentagemDefinida + "%")
           if (plataforma === "win32") {
             exec('rundll32.exe user32.dll,LockWorkStation', (error) => {
               if (error) return console.error(`Erro ao travar no Windows: ${error.message}`)
@@ -64,14 +70,6 @@ function createWindow() {
           } else {
             console.log('Plataforma não suportada para travamento automático.')
           }
-        }
-
-        if (batteryData.isCharging && porcentagem >= 70) {
-          console.log(`Carregando normalmente - Bateria em ${porcentagem}%`)
-        }
-
-        if (!batteryData.isCharging) {
-          console.log(`Descarregando - Bateria em ${porcentagem}% - Enviar meme`)
         }
       }
     } catch (error) {
@@ -90,6 +88,14 @@ function createWindow() {
   mainWindow.on('closed', () => {
     mainWindow = null
   })
+}
+let popupsAtivos = [] 
+function fecharTodosPopups() {
+  popupsAtivos.forEach(popup => {
+    if (!popup.isDestroyed()) popup.close()
+  })
+  popupsAtivos = []
+  contadorPopups = 0
 }
 
 app.whenReady().then(createWindow)
