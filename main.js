@@ -1,6 +1,6 @@
 const { app, BrowserWindow } = require('electron')
 const path = require('path')
-
+const si = require('systeminformation');
 let mainWindow
 
 function createWindow() {
@@ -14,6 +14,12 @@ function createWindow() {
       enableRemoteModule: false
     }
   })
+
+si.battery().then(battery => {
+  console.log('Bateria detectada:', battery.hasBattery);
+  console.log('Detalhes:', battery);
+}).catch(err => console.error(err));
+
  
 
 
