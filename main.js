@@ -1,15 +1,17 @@
-const { app, BrowserWindow } = require('electron')
+const { app, BrowserWindow, Tray, Menu } = require('electron')
 const path = require('path')
 const si = require('systeminformation')
 const { exec } = require('child_process')
 const os = require('os')
 
 let mainWindow
+let tray = null
 
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
+    icon: path.join(__dirname, 'icon.png'), // ícone da janela (opcional)
     webPreferences: {
       contextIsolation: true,
       preload: path.join(__dirname, 'preload.js')
@@ -17,6 +19,16 @@ function createWindow() {
   })
 
   mainWindow.loadFile('index.html')
+
+  // Ícone da bandeja
+  tray = new Tray(path.join(__dirname, 'icon.png')) // Use um ícone pequeno aqui
+  const trayMenu = Menu.buildFromTemplate([
+    { label: 'Mostrar', click: () => mainWindow.show() },
+    { label: 'Sair', click: () => app.quit() }
+  ])
+  tray.setToolTip('Monitor de Bateria')
+  tray.setContextMenu(trayMenu)
+  tray.on('double-click', () => mainWindow.show())
 
   // Função para atualizar informações da bateria
   async function updateBatteryInfo() {
@@ -48,8 +60,6 @@ function createWindow() {
 
         if (batteryData.isCharging && porcentagem >= 98) {
           console.log(`Carregando normalmente - Bateria em ${porcentagem}%`)
-          console.log(plataforma)
-
         }
 
         if (!batteryData.isCharging) {
@@ -61,7 +71,7 @@ function createWindow() {
     }
   }
 
-  // Esconde a janela ao invés de fechar
+  // Oculta a janela ao clicar em fechar
   mainWindow.on('close', (event) => {
     event.preventDefault()
     mainWindow.hide()
