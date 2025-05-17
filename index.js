@@ -5,10 +5,6 @@ const videoFiles = [
     'videos/4.mp4',
     'videos/5.mp4',
     'videos/6.mp4',
-    'videos/7.mp4',
-    'videos/8.mp4',
-    'videos/9.mp4',
-    'videos/10.mp4',
     'videos/11.mp4',
     'videos/12.mp4',
     'videos/13.mp4',
@@ -25,6 +21,9 @@ const videoFiles = [
     const randomIndex = Math.floor(Math.random() * videoFiles.length);
     const selectedVideo = videoFiles[randomIndex];
     videoElement.src = selectedVideo;
+
+    videoElement.muted = false;  
+    videoElement.volume = 1; 
     videoElement.play();
   }
 
