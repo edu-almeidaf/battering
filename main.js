@@ -46,7 +46,7 @@ function createWindow() {
           fecharTodosPopups()
         }
 
-      if (porcentagem !== ultimoNivelBateria && porcentagem != null && batteryData.isCharging == false && porcentagem < batteryPercentage) {
+      if (porcentagem !== ultimoNivelBateria && porcentagem != null && batteryData.isCharging == false && porcentagem <= batteryPercentage) {
         contadorPopups++
         const novosPopups = popupGenerate(`A bateria está em ${porcentagem}%`, contadorPopups)
         popupsAtivos.push(...novosPopups)
