@@ -1,5 +1,5 @@
      
-# Battering - Transformando Música em Experiência
+# Battering 
 
 ### 📌 Sobre o **Battering**  
 
@@ -70,16 +70,8 @@ battering/
 ├── package.json            # Project dependencies and scripts
 ├── README.md              # Project documentation
 ├── package-lock.json      # Locked dependencies
-├── test/                  # Test directory
-│   ├── unit/             # Unit test files
-│   └── integration/      # Integration test files
 └── popupGenerator.js      # Popup window management
 
-```
-
-## 🧪 Testes
-```bash
-npm test
 ```
 
 ## 📝 Licença
