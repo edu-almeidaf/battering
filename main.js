@@ -38,8 +38,8 @@ function createWindow() {
       const batteryData = await si.battery()
       const plataforma = os.platform()
       const porcentagem = batteryData.percent
-      const porcentagemDefinida = 40
-      if (porcentagem >= 41) {
+      const porcentagemDefinida = 71
+      if (porcentagem >= porcentagemDefinida) {
           fecharTodosPopups()
         }
 
