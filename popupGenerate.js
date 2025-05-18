@@ -4,7 +4,7 @@ const path = require('path');
 function popupGenerate(mensagem, contadorPopups) {
   const display = screen.getPrimaryDisplay()
   const { width, height } = display.workAreaSize
-  const popupWidth = 600
+  const popupWidth = 300
   const popupHeight = 300
 
   const popupsCriados = []
