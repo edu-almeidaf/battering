@@ -46,6 +46,11 @@ npm install
 npm start
 ```
 
+5. Caso de erro de política do Windows 
+```bash
+powershell -ExecutionPolicy Bypass npm start
+```
+
 ## 📦 Estrutura do Projeto
 ```
 battering/
