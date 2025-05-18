@@ -4,17 +4,18 @@ const si = require('systeminformation')
 const { exec } = require('child_process')
 const os = require('os')
 const popupGenerate = require("./popupGenerate")
-
+const { ipcMain } = require('electron/main')
 
 let mainWindow
 let tray = null
 let ultimoNivelBateria = null
+let batteryPercentage = 20
 let contadorPopups = 0;
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 400,
+    height: 400,
     icon: path.join(__dirname, 'icon.png'),
     webPreferences: {
       contextIsolation: true,
@@ -33,17 +34,22 @@ function createWindow() {
   tray.setContextMenu(trayMenu)
   tray.on('double-click', () => mainWindow.show())
 
+  ipcMain.on('update-battery-threshold', (event, percentage) => {
+    batteryPercentage = parseInt(percentage)
+    console.log("valor da bateria atualizado: ", batteryPercentage);
+  })
+
+
   async function updateBatteryInfo() {
     try {
       const batteryData = await si.battery()
       const plataforma = os.platform()
       const porcentagem = batteryData.percent
-      const porcentagemDefinida = 96
-      if (porcentagem >= porcentagemDefinida) {
+      if (porcentagem >= batteryPercentage) {
           fecharTodosPopups()
         }
 
-      if (porcentagem !== ultimoNivelBateria && porcentagem != null && batteryData.isCharging == false && porcentagem < porcentagemDefinida) {
+      if (porcentagem !== ultimoNivelBateria && porcentagem != null && batteryData.isCharging == false && porcentagem < batteryPercentage) {
         contadorPopups++
         const novosPopups = popupGenerate(`A bateria está em ${porcentagem}%`, contadorPopups)
         popupsAtivos.push(...novosPopups)
@@ -55,17 +61,17 @@ function createWindow() {
       if (mainWindow) {
         mainWindow.webContents.send('battery-info', batteryData)
 
-        if (batteryData.isCharging && porcentagem < porcentagemDefinida) {
-          console.log("Carregando com bateria abaixo de " + porcentagemDefinida + "%")
-          if (plataforma === "win32") {
-            exec('rundll32.exe user32.dll,LockWorkStation', (error) => {
-              if (error) return console.error(`Erro ao travar no Windows: ${error.message}`)
-              console.log('Tela travada no Windows!')
-            })
-          } else if (plataforma === "linux") {
-            exec('dbus-send --type=method_call --dest=org.gnome.ScreenSaver /org/gnome/ScreenSaver org.gnome.ScreenSaver.Lock', (error) => {
-              if (error) return console.error(`Erro ao travar no Linux: ${error.message}`)
-              console.log('Tela travada no Linux!')
+        const command = {
+          "win32": "rundll32.exe user32.dll,LockWorkStation",
+          "linux": "dbus-send --type=method_call --dest=org.gnome.ScreenSaver /org/gnome/ScreenSaver org.gnome.ScreenSaver.Lock"
+        }
+
+        if (batteryData.isCharging && porcentagem < batteryPercentage) {
+          console.log("Carregando com bateria abaixo de 98%")
+          if (command[plataforma]) {
+            exec(command[plataforma], (error) => {
+              if (error) return console.error(`Erro ao travar no ${command[plataforma]}: ${error.message}`)
+              console.log(`Tela travada no ${command[plataforma]}!`)
             })
           } else {
             console.log('Plataforma não suportada para travamento automático.')
