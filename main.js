@@ -1,4 +1,4 @@
-const { app, BrowserWindow, Tray, Menu, Notification } = require('electron')
+const { app, BrowserWindow, Tray, Menu } = require('electron')
 const path = require('path')
 const si = require('systeminformation')
 const { exec } = require('child_process')
@@ -16,24 +16,21 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     width: 400,
     height: 400,
-    icon: path.join(__dirname, 'icon.png'),
+    icon: path.join(__dirname, 'app/image/beleza.png'),
     webPreferences: {
       contextIsolation: true,
       preload: path.join(__dirname, 'preload.js')
     }
   })
 
-  mainWindow.loadFile('index.html')
+  mainWindow.loadFile('app/view/index.html')
 
-  tray = new Tray(path.join(__dirname, 'icon.png'))
-  const trayMenu = Menu.buildFromTemplate([
-    { label: 'Mostrar', click: () => mainWindow.show() },
-    { label: 'Sair', click: () => app.quit() }
-  ])
+  tray = new Tray(path.join(__dirname, 'app/image/beleza.png'))
+  const trayMenu = Menu.buildFromTemplate([])
   tray.setToolTip('Battering')
   tray.setContextMenu(trayMenu)
   tray.on('double-click', () => mainWindow.show())
-
+  Menu.setApplicationMenu(null)
   ipcMain.on('update-battery-threshold', (event, percentage) => {
     batteryPercentage = parseInt(percentage)
     console.log("valor da bateria atualizado: ", batteryPercentage);

@@ -29,7 +29,7 @@ function popupGenerate(mensagem, contadorPopups) {
       }
     })
     
-    const arquivoHtmlPath = path.join(__dirname, 'popup.html');
+    const arquivoHtmlPath = path.join(__dirname, 'app/view/popup.html');
 
     popup.loadFile(arquivoHtmlPath)
 
