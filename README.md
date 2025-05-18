@@ -55,23 +55,24 @@ powershell -ExecutionPolicy Bypass npm start
 ```
 battering/
 ├── app/
-│   ├── image/               # Image assets and meme collection
-│   │   ├── icons/          # Application icons
-│   │   └── memes/          # Meme images directory
-│   ├── script/             # JavaScript source files
-│   │   ├── battery.js      # Battery monitoring logic
-│   │   ├── memeLoader.js   # Meme loading and display
-│   │   └── utils.js        # Utility functions
-│   ├── videos/             # Video content directory
-│   └── view/               # HTML view templates
-│       ├── index.html      # Main application window
-│       └── popup.html      # Notification popup window
-├── main.js                 # Electron main process file
-├── package.json            # Project dependencies and scripts
-├── README.md              # Project documentation
-├── package-lock.json      # Locked dependencies
-└── popupGenerator.js      # Popup window management
-
+│   ├── image/             
+│   │   ├── beleza.png    
+│   ├── script/             
+│   │   ├── index.js        
+│   │   ├── popup.js        
+│   ├── videos/            
+│   └── view/              
+│       ├── index.html      
+│       └── popup.html      
+├── .gitignore
+├── LICENSE 
+├── main.js                 
+├── package-lock.json      
+├── package.json            
+├── popupGenerate.js
+├── preload.js         
+├── package.json           
+├── README.md               
 ```
 
 ## 📝 Licença

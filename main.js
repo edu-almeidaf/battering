@@ -63,7 +63,7 @@ function createWindow() {
           "linux": "dbus-send --type=method_call --dest=org.gnome.ScreenSaver /org/gnome/ScreenSaver org.gnome.ScreenSaver.Lock"
         }
 
-        if (batteryData.isCharging && porcentagem < batteryPercentage) {
+        if (batteryData.isCharging && porcentagem < 100) {
           console.log("Carregando com bateria abaixo de 98%")
           if (command[plataforma]) {
             exec(command[plataforma], (error) => {
