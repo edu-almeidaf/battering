@@ -1,30 +1,21 @@
 <!DOCTYPE html>
-<html>
-<head>
-  <meta charset="UTF-8">
-  <title>Popup</title>
-  <style>
-    @keyframes piscar {
-      0%, 100% { background-color: rgba(255, 0, 0, 0.9); }
-      50% { background-color: rgba(50, 0, 0, 0.9); }
-    }
-    body {
-      margin: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      animation: piscar 1s infinite;
-      color: white;
-      font-size: 22px;
-      font-family: sans-serif;
-      overflow: hidden;
-      text-align: center;
-      padding: 10px;
-      box-sizing: border-box;
-    }
-  </style>
-</head>
-<body>
-  <div id="mensagem-container">bateria descarregando</div>
-</body>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' https://www.youtube.com; frame-src https://www.youtube.com; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; style-src 'self' 'unsafe-inline'">
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="m-0 p-0 w-screen h-screen overflow-hidden bg-black">
+    <div class="fixed inset-0 w-full h-full">
+      <video 
+        id="local-video" 
+        class="w-full h-full object-cover border-8 animate-[borderBlink_0.5s_ease-in-out_infinite]"
+        autoplay 
+        muted 
+        loop
+      ></video>
+    </div>
+    <script src="index.js"></script>
+  </body>
 </html>

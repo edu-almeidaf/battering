@@ -1,0 +1,31 @@
+* {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      
+      html, body {
+        overflow: hidden;
+      } 
+
+      #video-container {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+      #youtube-frame {
+        width: 100%;
+        height: 100%;
+        border: none;
+        object-fit: cover;
+        object-fit: cover;
+
+      }
+
+    @keyframes borderBlink {
+    0%, 100% { border-color: red; }
+    50% { border-color: yellow; }
+    }
