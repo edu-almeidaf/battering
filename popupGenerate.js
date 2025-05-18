@@ -1,4 +1,5 @@
 const { screen, BrowserWindow } = require('electron')
+const path = require('path');
 
 function popupGenerate(mensagem, contadorPopups) {
   const display = screen.getPrimaryDisplay()
@@ -28,28 +29,33 @@ function popupGenerate(mensagem, contadorPopups) {
       }
     })
 
-    popup.loadURL(`data:text/html;charset=utf-8,
-      <html>
-        <head>
-          <style>
-            @keyframes piscar {
-              0%, 100% { background-color: rgba(255, 0, 0, 0.9); }
-              50% { background-color: rgba(50, 0, 0, 0.9); }
-            }
-            body {
-              margin: 0;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              animation: piscar 1s infinite;
-              color: white;
-              font-size: 22px;
-              font-family: sans-serif;
-            }
-          </style>
-        </head>
-        <body>${mensagem}</body>
-      </html>`)
+    // popup.loadURL(`data:text/html;charset=utf-8,
+    //   <html>
+    //     <head>
+    //       <style>
+    //         @keyframes piscar {
+    //           0%, 100% { background-color: rgba(255, 0, 0, 0.9); }
+    //           50% { background-color: rgba(50, 0, 0, 0.9); }
+    //         }
+    //         body {
+    //           margin: 0;
+    //           display: flex;
+    //           align-items: center;
+    //           justify-content: center;
+    //           animation: piscar 1s infinite;
+    //           color: white;
+    //           font-size: 22px;
+    //           font-family: sans-serif;
+    //         }
+    //       </style>
+    //     </head>
+    //     <body>${mensagem}</body>
+    //   </html>`)
+    
+    const arquivoHtmlPath = path.join(__dirname, 'popup.html');
+
+    popup.loadFile(arquivoHtmlPath)
+
 
     popup.once('ready-to-show', () => popup.show())
 
