@@ -19,7 +19,6 @@
 ### Frontend
 - Electron
 - JavaScript
-- CSS
 - tailwindcss
 - HTML
 
@@ -51,8 +50,6 @@ npm start
 ```
 battering/
 ├── app/
-│   ├── css/                  # Stylesheets and styling files
-│   │   └── style.css        # Main stylesheet
 │   ├── image/               # Image assets and meme collection
 │   │   ├── icons/          # Application icons
 │   │   └── memes/          # Meme images directory
